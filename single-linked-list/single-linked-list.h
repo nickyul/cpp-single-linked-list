@@ -126,32 +126,17 @@ public:
         if (size_ != 0 || head_.next_node != nullptr) {
             Clear();
         }
-        SingleLinkedList tmp;
-        SingleLinkedList tmp_reverse;
-        for (auto it = values.begin(); it != values.end(); ++it) {
-            tmp.PushFront(*it);
-        }
-        for (auto it = tmp.begin(); it != tmp.end(); ++it) {
-            tmp_reverse.PushFront(*it);
-        }
-
-        swap(tmp_reverse);
+        SingleLinkedList tmp = GetTmpList(values);
+        swap(tmp);
     }
 
     SingleLinkedList(const SingleLinkedList& other) {
         if (size_ != 0 || head_.next_node != nullptr) {
             Clear();
         }
-        SingleLinkedList tmp;
-        SingleLinkedList tmp_reverse;
-        for (auto it = other.begin(); it != other.end(); ++it) {
-            tmp.PushFront(*it);
-        }
-        for (auto it = tmp.begin(); it != tmp.end(); ++it) {
-            tmp_reverse.PushFront(*it);
-        }
 
-        swap(tmp_reverse);
+        SingleLinkedList tmp = GetTmpList(other);
+        swap(tmp);
     }
 
     ~SingleLinkedList() {
@@ -298,6 +283,19 @@ public:
     }
 
 private:
+    template <typename values>
+    SingleLinkedList GetTmpList(const values& other) {
+        SingleLinkedList tmp;
+        SingleLinkedList tmp_reverse;
+        for (auto it = other.begin(); it != other.end(); ++it) {
+            tmp.PushFront(*it);
+        }
+        for (auto it = tmp.begin(); it != tmp.end(); ++it) {
+            tmp_reverse.PushFront(*it);
+        }
+        return tmp_reverse;
+    }
+
     // Фиктивный узел, используется для вставки "перед первым элементом"
     Node head_;
     size_t size_ = 0;
@@ -312,9 +310,6 @@ template <typename Type>
 bool operator==(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
     if (lhs.GetSize() != rhs.GetSize()) {
         return false;
-    }
-    if (lhs.head_.next_node == rhs.head_.next_node) {
-        return true;
     }
     return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
