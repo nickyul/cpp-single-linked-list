@@ -123,20 +123,13 @@ public:
     }
 
     SingleLinkedList(std::initializer_list<Type> values) {
-        if (size_ != 0 || head_.next_node != nullptr) {
-            Clear();
-        }
-        SingleLinkedList tmp = GetTmpList(values);
-        swap(tmp);
+        Constructor(values.begin(), values.end());
+        size_ = values.size();
     }
 
     SingleLinkedList(const SingleLinkedList& other) {
-        if (size_ != 0 || head_.next_node != nullptr) {
-            Clear();
-        }
-
-        SingleLinkedList tmp = GetTmpList(other);
-        swap(tmp);
+        Constructor(other.begin(), other.end());
+        size_ = other.size_;
     }
 
     ~SingleLinkedList() {
@@ -283,17 +276,15 @@ public:
     }
 
 private:
-    template <typename values>
-    SingleLinkedList GetTmpList(const values& other) {
+    template <typename Iterator>
+    void Constructor(Iterator begin, Iterator end) {
         SingleLinkedList tmp;
-        SingleLinkedList tmp_reverse;
-        for (auto it = other.begin(); it != other.end(); ++it) {
-            tmp.PushFront(*it);
+        Node* node = &tmp.head_;
+        for (auto it = begin; it != end; ++it) {
+            node->next_node = new Node(*it, nullptr);
+            node = node->next_node;
         }
-        for (auto it = tmp.begin(); it != tmp.end(); ++it) {
-            tmp_reverse.PushFront(*it);
-        }
-        return tmp_reverse;
+        swap(tmp);
     }
 
     // Фиктивный узел, используется для вставки "перед первым элементом"
@@ -310,6 +301,9 @@ template <typename Type>
 bool operator==(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
     if (lhs.GetSize() != rhs.GetSize()) {
         return false;
+    }
+    if (&lhs == &rhs) {
+        return true;
     }
     return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
@@ -338,5 +332,5 @@ bool operator>(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& 
 
 template <typename Type>
 bool operator>=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    return !(lhs > rhs);
+    return !(lhs < rhs);
 }
