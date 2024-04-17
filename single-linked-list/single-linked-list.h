@@ -124,12 +124,10 @@ public:
 
     SingleLinkedList(std::initializer_list<Type> values) {
         Constructor(values.begin(), values.end());
-        size_ = values.size();
     }
 
     SingleLinkedList(const SingleLinkedList& other) {
         Constructor(other.begin(), other.end());
-        size_ = other.size_;
     }
 
     ~SingleLinkedList() {
@@ -284,6 +282,7 @@ private:
             node->next_node = new Node(*it, nullptr);
             node = node->next_node;
         }
+        tmp.size_ = std::distance(begin, end);
         swap(tmp);
     }
 
@@ -322,7 +321,7 @@ bool operator<(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& 
 
 template <typename Type>
 bool operator<=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    return !(lhs < rhs);
+    return !(lhs > rhs);
 }
 
 template <typename Type>
