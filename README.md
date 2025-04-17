@@ -15,22 +15,27 @@ C++17 (шаблоны, move-семантика, initializer_list)
 STL-совместимый интерфейс
 
 ## Основной функционал
+
 // Создание и инициализация
+
 SingleLinkedList<int> list1{1, 2, 3};
 
 SingleLinkedList<int> list2 = list1;
 
 // Вставка элементов
+
 list1.PushFront(0);           // Добавление в начало
 
 auto it = list1.InsertAfter(list1.cbegin(), 5);  // Вставка после позиции
 
 // Удаление элементов
+
 list1.PopFront();             // Удаление первого элемента
 
 list1.EraseAfter(list1.begin()); // Удаление после позиции
 
 // Итерация
+
 for (const auto& value : list1) {
 
     std::cout << value << " ";
@@ -38,6 +43,7 @@ for (const auto& value : list1) {
 }
 
 // Размер и проверка на пустоту
+
 size_t size = list1.GetSize();
 
 bool empty = list1.IsEmpty();
